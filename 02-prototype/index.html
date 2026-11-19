@@ -174,15 +174,9 @@
     .count-chip.jira { color: #a8cff4; background: rgba(47, 105, 156, .2); }
     .count-chip.ticket { color: #a5dfbd; background: rgba(51, 127, 85, .2); }
     .count-chip.total { color: #c7c7d0; background: #303038; }
-    .account-list { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 10px; }
-    .account-chip {
-      padding: 3px 6px;
-      border: 1px solid #41414a;
-      border-radius: 5px;
-      color: #dedee4;
-      font-size: 10px;
-    }
-    .account-chip small { color: #aaaab5; }
+    .slack-account-line { margin: 4px 0 9px; color: #dedee4; font-size: 11px; line-height: 1.65; }
+    .slack-account-line strong { color: #f0eff4; }
+    .account-divider { padding: 0 5px; color: var(--subtle); }
     .evidence-label { color: var(--subtle); font-size: 10px; font-weight: 700; letter-spacing: .075em; text-transform: uppercase; }
     .quote-row { display: grid; grid-template-columns: 1fr; gap: 6px; margin: 5px 0 9px; }
     blockquote {
@@ -209,6 +203,15 @@
     .source-text { margin: 5px 0 0; color: #e3e3e9; font-size: 11px; }
     .source-context { margin: 4px 0 0; color: #a9a9b3; font-size: 10px; }
     .message-actions { display: flex; align-items: center; gap: 9px; margin-top: 8px; }
+    .review-status { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-top: 9px; }
+    .status-caption { margin-right: 2px; color: var(--subtle); font-size: 9px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
+    .status-button { border: 1px solid #3b3b44; border-radius: 5px; padding: 3px 6px; color: #b7b7c1; background: rgba(30, 30, 36, .55); cursor: pointer; font-size: 10px; }
+    .status-button:hover { border-color: #676170; color: #f2f0f6; }
+    .status-button[aria-pressed="true"] { border-color: #79688f; color: #f2eaff; background: rgba(102, 79, 131, .3); box-shadow: inset 0 0 0 1px rgba(187, 164, 248, .12); }
+    .status-button[data-status="p1"][aria-pressed="true"] { border-color: #a85a5f; color: #ffc6c8; background: rgba(147, 51, 57, .24); }
+    .status-button[data-status="completed"][aria-pressed="true"] { border-color: #4b8762; color: #b5edc8; background: rgba(44, 112, 69, .24); }
+    .status-button[data-status="new"][aria-pressed="true"] { border-color: #6a78a1; color: #c9d5ff; background: rgba(67, 88, 144, .25); }
+    .status-note { color: var(--subtle); font-size: 9px; }
     .thread-button { border: 0; padding: 2px 0; color: #bba4f8; background: transparent; cursor: pointer; font-size: 11px; font-weight: 650; }
     .thread-button:hover { color: #e0d5ff; text-decoration: underline; }
     .thread-state { color: var(--muted); font-size: 10px; }
@@ -369,10 +372,17 @@
     ];
 
     const themes = [
-      { id: "dashboard", emoji: "🐢", name: "Large dashboards load slowly", why: "Month-end and analyst work is delayed when large dashboards take over a minute to load (GENESYS-4309; SLK-08).", evidence: ["GENESYS-4309", "SLK-08"] },
-      { id: "pipeline", emoji: "🔄", name: "Pipelines fail after connector update", why: "Amazon's dashboard refresh and Berkshire's release-readiness check are waiting on failed syncs (GENESYS-4301; GENESYS-4302).", evidence: ["GENESYS-4301", "GENESYS-4302"] },
-      { id: "sso", emoji: "🔐", name: "SSO sign-in loops or drops sessions", why: "JPMorgan and Amazon report blocked admin or service-user access during sign-in (GENESYS-4305; GENESYS-4307).", evidence: ["GENESYS-4305", "GENESYS-4307"] },
-      { id: "permissions", emoji: "🛡️", name: "Teams need column-level permissions", why: "JPMorgan reports that contractor access cannot hide sensitive fields while keeping the report available (GENESYS-4313).", evidence: ["GENESYS-4313", "SLK-11"] }
+      { id: "dashboard", emoji: "🐢", name: "Large dashboards load slowly", why: "Month-end and analyst work is delayed when large dashboards take over a minute to load (GENESYS-4309; SLK-08).", evidence: ["GENESYS-4309", "SLK-08"], initialStatus: "checking" },
+      { id: "pipeline", emoji: "🔄", name: "Pipelines fail after connector update", why: "Amazon's dashboard refresh and Berkshire's release-readiness check are waiting on failed syncs (GENESYS-4301; GENESYS-4302).", evidence: ["GENESYS-4301", "GENESYS-4302"], initialStatus: "p1" },
+      { id: "sso", emoji: "🔐", name: "SSO sign-in loops or drops sessions", why: "JPMorgan and Amazon report blocked admin or service-user access during sign-in (GENESYS-4305; GENESYS-4307).", evidence: ["GENESYS-4305", "GENESYS-4307"], initialStatus: "completed" },
+      { id: "permissions", emoji: "🛡️", name: "Teams need column-level permissions", why: "JPMorgan reports that contractor access cannot hide sensitive fields while keeping the report available (GENESYS-4313).", evidence: ["GENESYS-4313", "SLK-11"], initialStatus: "new" }
+    ];
+
+    const reviewStatuses = [
+      { id: "completed", label: "✅ Completed" },
+      { id: "checking", label: "👀 Checking" },
+      { id: "p1", label: "🚨 P1 alert" },
+      { id: "new", label: "🆕 New" }
     ];
 
     const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -408,7 +418,8 @@
       const jira = sourceCount(items, "Jira");
       const tickets = sourceCount(items, "Ticket");
       const evidence = theme.evidence.map((id) => sources.find((source) => source.id === id)).filter(Boolean);
-      const accountChips = affected.map((name) => `<span class="account-chip">${escapeHtml(name)} <small>· ${escapeHtml(accounts[name].arr)} demo ARR</small></span>`).join("");
+      const accountLine = affected.map((name) => `<span><strong>${escapeHtml(name)}</strong> · ${escapeHtml(accounts[name].arr)} demo ARR</span>`).join('<span class="account-divider">|</span>');
+      const statusControls = reviewStatuses.map((status) => `<button class="status-button" type="button" data-status="${status.id}" aria-pressed="${status.id === theme.initialStatus}" aria-label="Set PM review status to ${status.label}">${status.label}</button>`).join("");
       return `<article class="theme-card" aria-labelledby="title-${escapeHtml(theme.id)}">
         <div class="message-avatar" aria-hidden="true">✦</div>
         <div class="message-body">
@@ -424,8 +435,8 @@
             <span class="count-chip ticket">${tickets} tickets</span>
             <span class="count-chip total">${items.length} total</span>
           </div>
-          <div class="evidence-label">Accounts mentioned · simulated demo ARR</div>
-          <div class="account-list">${accountChips}</div>
+          <div class="evidence-label">Accounts mentioned</div>
+          <p class="slack-account-line">🏢 <strong>Accounts:</strong> ${accountLine}</p>
           <div class="evidence-label">💬 Evidence from the week</div>
           <div class="quote-row">${evidence.map((source) => `<blockquote>“${escapeHtml(source.text)}”<footer><a href="#src-${escapeHtml(source.id)}">${escapeHtml(source.type)} · ${escapeHtml(source.id)}</a></footer></blockquote>`).join("")}</div>
           <p class="why"><strong>Why this matters:</strong> ${escapeHtml(theme.why)}</p>
@@ -433,6 +444,11 @@
             <summary>View sources (${items.length})</summary>
             <ul class="source-list">${items.map(renderSource).join("")}</ul>
           </details>
+          <div class="review-status" role="group" aria-label="PM on-duty review status">
+            <span class="status-caption">PM check-in</span>
+            ${statusControls}
+            <span class="status-note">triage only · issue status unchanged</span>
+          </div>
           <div class="message-actions">
             <button class="thread-button" type="button" aria-expanded="false" aria-controls="thread-${escapeHtml(theme.id)}">↪ Reply in thread</button>
             <span class="thread-state">Separate discussion for this theme</span>
@@ -461,6 +477,14 @@
         button.setAttribute("aria-expanded", String(!isOpen));
         panel.hidden = isOpen;
         button.textContent = isOpen ? "↪ Reply in thread" : "↪ Close thread preview";
+      });
+    });
+
+    document.querySelectorAll(".review-status").forEach((group) => {
+      group.querySelectorAll(".status-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          group.querySelectorAll(".status-button").forEach((option) => option.setAttribute("aria-pressed", String(option === button)));
+        });
       });
     });
 
