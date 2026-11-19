@@ -5,7 +5,7 @@
 > Task we aim for: Build Seven-day feedback digest: a single screen where a PM can review what happened across Slack, Jira, and support tickets during the past week, synthesized into themes.
 
 **Who's using it: **
-- Product manager "on-duty" - each week on Monday morning 9:00AM CET, a single PM is selected to go through Slack channel "#customer-feedback-nov19" and summarize tickets and process them for the rest of the team. In case some feedback is unclear, they follow up with customer. They need to understand which feedback is related to bugs, which feedback is feature requests and what part of the product is it related to. They also need to make sure that feedback that is related to top priorities is processes first so it can influence GA.
+- Product manager "on-duty" - each week on Monday morning 9:00AM CET, a single PM is selected to go through Slack channels, Jira tickets and Genesysis Customer care tickets and summarize tickets and process them for the rest of the team. If feedback is clear, they route it to the specific team by creating Jira ticket or they use Slack threads to discuss it further with the wider team.  In case some feedback is unclear, they follow up with customer. They need to understand which feedback is related to bugs, which feedback is feature requests and what part of the product is it related to. They also need to make sure that feedback that is related to top priorities is processes first so it can influence GA.
 
 **Where PM will see output of the Seven-day feedback digest: **
 - Directly in Slack. We will use agent to process the feedbacks and share a message in Slack with summary of the tickets and recommended actions.
