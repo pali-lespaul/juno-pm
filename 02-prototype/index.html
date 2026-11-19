@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17171c">
+  <title>Juno Seven-day feedback digest</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #17171c;
+      --panel: #222228;
+      --panel-soft: #1d1d23;
+      --line: #34343d;
+      --muted: #a5a5b0;
+      --subtle: #777783;
+      --text: #f2f2f5;
+      --purple: #bba4f8;
+      --purple-deep: #352c4c;
+      --green: #77c69c;
+      --amber: #edbd70;
+      --blue: #7ab4e6;
+      --red: #ee8d91;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: var(--page); }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -260px, rgba(131, 99, 198, .15), transparent 660px),
+        var(--page);
+      font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: #c7b4ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    button { font: inherit; }
+
+    .topbar {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 0 24px;
+      border-bottom: 1px solid #303038;
+      background: rgba(24, 24, 30, .94);
+    }
+    .mark {
+      width: 27px;
+      height: 27px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: #4a315e;
+      color: #f6eefe;
+      font-size: 16px;
+    }
+    .brand { font-weight: 720; letter-spacing: .01em; }
+    .crumb { color: var(--muted); }
+    .topbar-spacer { flex: 1; }
+    .workspace-tag {
+      color: #d8d7de;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: 12px;
+    }
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #675285;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 26px; }
+    .eyebrow {
+      color: var(--purple);
+      font-size: 11px;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 6px 0 5px; font-size: clamp(24px, 3vw, 31px); line-height: 1.15; letter-spacing: -.035em; }
+    .subtitle { margin: 0; max-width: 760px; color: var(--muted); }
+    .hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+    .summary-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .stat {
+      display: flex;
+      gap: 6px;
+      align-items: baseline;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 7px 10px;
+      background: rgba(34, 34, 40, .65);
+      white-space: nowrap;
+    }
+    .stat strong { font-size: 15px; }
+    .stat span { color: var(--muted); font-size: 11px; }
+    .demo-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 17px;
+      padding: 6px 9px;
+      color: #e6cf9e;
+      background: rgba(153, 111, 34, .15);
+      border: 1px solid rgba(208, 158, 73, .35);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 650;
+    }
+    .demo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 25px 0 10px;
+    }
+    h2 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
+    .sort-note { color: var(--muted); font-size: 11px; }
+    .theme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .theme-card {
+      min-width: 0;
+      padding: 15px 16px 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(150deg, rgba(38, 38, 45, .96), rgba(30, 30, 36, .98));
+      box-shadow: 0 5px 16px rgba(0, 0, 0, .08);
+    }
+    .theme-top { display: flex; align-items: flex-start; gap: 10px; }
+    .theme-emoji { font-size: 20px; line-height: 1.1; }
+    .theme-heading { flex: 1; min-width: 0; }
+    .theme-heading h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.25; }
+    .account-count {
+      flex: 0 0 auto;
+      padding: 4px 7px;
+      color: #e8dcff;
+      border: 1px solid #51466a;
+      border-radius: 6px;
+      background: rgba(99, 74, 138, .2);
+      font-size: 10px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .counts { display: flex; gap: 6px; flex-wrap: wrap; margin: 7px 0 9px; }
+    .count-chip { padding: 3px 6px; border-radius: 5px; font-size: 10px; font-weight: 650; }
+    .count-chip.slack { color: #ddbff3; background: rgba(126, 69, 142, .22); }
+    .count-chip.jira { color: #a8cff4; background: rgba(47, 105, 156, .2); }
+    .count-chip.ticket { color: #a5dfbd; background: rgba(51, 127, 85, .2); }
+    .count-chip.total { color: #c7c7d0; background: #303038; }
+    .account-list { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 10px; }
+    .account-chip {
+      padding: 3px 6px;
+      border: 1px solid #41414a;
+      border-radius: 5px;
+      color: #dedee4;
+      font-size: 10px;
+    }
+    .account-chip small { color: #aaaab5; }
+    .evidence-label { color: var(--subtle); font-size: 10px; font-weight: 700; letter-spacing: .075em; text-transform: uppercase; }
+    .quote-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 5px 0 9px; }
+    blockquote {
+      margin: 0;
+      padding: 8px 9px;
+      color: #e4e3e8;
+      border-left: 2px solid #8266af;
+      border-radius: 0 5px 5px 0;
+      background: rgba(18, 18, 23, .52);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    blockquote footer { margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .why {
+      margin: 0 0 9px;
+      padding: 8px 9px;
+      border-radius: 6px;
+      background: rgba(105, 83, 138, .13);
+      color: #e5def1;
+      font-size: 11px;
+    }
+    .why strong { color: #d2bfff; }
+    details { border-top: 1px solid #393941; padding-top: 8px; }
+    details summary { width: fit-content; color: #c5b2f5; cursor: pointer; font-size: 11px; font-weight: 650; }
+    details summary:hover { color: #e0d5ff; }
+    .source-list { display: grid; gap: 6px; margin: 9px 0 0; padding: 0; list-style: none; }
+    .source-item { padding: 8px 9px; border: 1px solid #393941; border-radius: 6px; background: #1b1b21; }
+    .source-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; color: var(--muted); font-size: 10px; }
+    .source-id { color: #cdbaff; font-weight: 750; }
+    .source-type { padding: 2px 5px; border-radius: 4px; background: #303038; color: #dedee4; }
+    .source-text { margin: 5px 0 0; color: #e3e3e9; font-size: 11px; }
+    .source-context { margin: 4px 0 0; color: #a9a9b3; font-size: 10px; }
+    .unthemed {
+      margin-top: 14px;
+      padding: 13px 15px;
+      border: 1px solid #3a3a42;
+      border-radius: var(--radius);
+      background: rgba(32, 32, 38, .8);
+    }
+    .unthemed-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 9px; }
+    .unthemed-head h2 { font-size: 13px; }
+    .unthemed-head span { color: var(--muted); font-size: 10px; }
+    .loose-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+    .loose-item { display: flex; gap: 7px; align-items: baseline; color: #d8d8de; font-size: 11px; }
+    .loose-id { flex: 0 0 auto; color: var(--purple); font-size: 10px; font-weight: 700; }
+    .footer-note { margin: 12px 2px 0; color: var(--subtle); font-size: 10px; }
+    .footer-note a { color: #bba4f8; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 760px) {
+      .topbar { padding: 0 14px; }
+      main { width: min(100% - 24px, 580px); padding-top: 22px; }
+      .hero-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .summary-stats { justify-content: flex-start; }
+      .theme-grid { grid-template-columns: 1fr; }
+      .quote-row { grid-template-columns: 1fr; }
+      .loose-list { grid-template-columns: 1fr; }
+      .workspace-tag { display: none; }
+    }
+    @media (max-width: 420px) {
+      main { width: calc(100% - 20px); }
+      .topbar { gap: 9px; }
+      .crumb { display: none; }
+      .theme-card { padding: 13px 12px; }
+      .account-count { font-size: 9px; }
+      .stat { padding: 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="mark" aria-hidden="true">✦</div>
+    <span class="brand">Juno PM</span>
+    <span class="crumb">/</span>
+    <span class="crumb">Feedback digest</span>
+    <span class="topbar-spacer"></span>
+    <span class="workspace-tag">RocketShip · Product</span>
+    <span class="avatar" aria-label="On-duty PM">PM</span>
+  </header>
+
+  <main>
+    <section aria-labelledby="page-title">
+      <div class="hero-row">
+        <div>
+          <div class="eyebrow">Weekly customer signals</div>
+          <h1 id="page-title">Juno Seven-day feedback digest</h1>
+          <p class="subtitle">Week of November 9, 2026 · A source-linked synthesis of what customers and teams reported.</p>
+        </div>
+        <div class="summary-stats" aria-label="Digest totals">
+          <div class="stat"><strong id="signal-total">40</strong><span>signals processed</span></div>
+          <div class="stat"><strong id="theme-total">4</strong><span>themes</span></div>
+          <div class="stat"><strong id="loose-total">4</strong><span>unthemed</span></div>
+        </div>
+      </div>
+      <div class="demo-label"><span class="demo-dot"></span>Demo data · simulated Slack, Jira, and tickets</div>
+    </section>
+
+    <section aria-labelledby="themes-title">
+      <div class="section-head">
+        <h2 id="themes-title">💬 This week in feedback</h2>
+        <span class="sort-note">Sorted by affected accounts, then signal count</span>
+      </div>
+      <div class="theme-grid" id="theme-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="unthemed" aria-labelledby="unthemed-title">
+      <div class="unthemed-head">
+        <h2 id="unthemed-title">🧩 Unthemed signals</h2>
+        <span>Items without enough overlap to group confidently</span>
+      </div>
+      <div class="loose-list" id="loose-list"></div>
+    </section>
+
+    <p class="footer-note">
+      All conversations, tickets, account relationships, and ARR values are simulated. Company names are sample labels from the
+      <a href="https://www.forbes.com/sites/forbesstaff/2025/07/02/the-global-2000-top-200/" target="_blank" rel="noreferrer">Forbes 2025 Global 2000 top five</a>;
+      they do not imply these companies use RocketShip. Demo ARR is fictional.
+    </p>
+  </main>
+
+  <script>
+    const accounts = {
+      "Amazon": { arr: "$195,000" },
+      "Berkshire Hathaway": { arr: "$180,000" },
+      "ICBC": { arr: "$125,000" },
+      "JPMorgan Chase": { arr: "$240,000" },
+      "Saudi Aramco": { arr: "$210,000" }
+    };
+
+    const sources = [
+      // Slack messages: 15 total, across the three requested channels.
+      { id: "SLK-01", type: "Slack", date: "Mon, Nov 9 · 09:12", channel: "#eng-oncall", account: "Amazon", theme: "pipeline", text: "Since 4.8.0, two scheduled warehouse runs exit during schema validation. Retrying the same job succeeds on the second attempt." },
+      { id: "SLK-02", type: "Slack", date: "Mon, Nov 9 · 10:04", channel: "#customer-escalations", account: "Amazon", theme: "pipeline", text: "Amazon's analytics team says its morning pipeline is still red after the release; their daily dashboard refresh is waiting on it." },
+      { id: "SLK-03", type: "Slack", date: "Tue, Nov 10 · 11:26", channel: "#sales", account: "Berkshire Hathaway", theme: "pipeline", text: "Berkshire's rollout review moved because the first production sync failed twice after the connector update." },
+      { id: "SLK-04", type: "Slack", date: "Wed, Nov 11 · 08:41", channel: "#eng-oncall", account: "Saudi Aramco", theme: "pipeline", text: "Seeing the same post-4.8.0 validation failure on the Saudi Aramco tenant. Backfill is paused while the run is investigated." },
+      { id: "SLK-05", type: "Slack", date: "Mon, Nov 9 · 13:18", channel: "#customer-escalations", account: "JPMorgan Chase", theme: "sso", text: "JPMorgan admins land back on the sign-in page after the identity provider redirects to RocketShip." },
+      { id: "SLK-06", type: "Slack", date: "Tue, Nov 10 · 09:33", channel: "#eng-oncall", account: "ICBC", theme: "sso", text: "ICBC's SAML assertion is accepted, then the session drops before the workspace loads. Reproduced with their staging tenant." },
+      { id: "SLK-07", type: "Slack", date: "Tue, Nov 10 · 15:02", channel: "#sales", account: "Amazon", theme: "sso", text: "Amazon's service-account setup is blocked at SSO callback; security review cannot complete until it can sign in." },
+      { id: "SLK-08", type: "Slack", date: "Tue, Nov 10 · 10:55", channel: "#customer-escalations", account: "JPMorgan Chase", theme: "dashboard", text: "A 50M-row dashboard takes about 78 seconds to open for JPMorgan's analyst group." },
+      { id: "SLK-09", type: "Slack", date: "Wed, Nov 11 · 14:20", channel: "#eng-oncall", account: "Berkshire Hathaway", theme: "dashboard", text: "Large dashboard queries are queuing behind one another; Berkshire sees the spinner for more than a minute." },
+      { id: "SLK-10", type: "Slack", date: "Thu, Nov 12 · 09:46", channel: "#sales", account: "ICBC", theme: "dashboard", text: "ICBC's month-end review has started, and their shared dashboard is timing out on wider date ranges." },
+      { id: "SLK-11", type: "Slack", date: "Wed, Nov 11 · 10:10", channel: "#customer-escalations", account: "JPMorgan Chase", theme: "permissions", text: "JPMorgan can hide whole reports from contractors but cannot hide just the salary and account-number columns." },
+      { id: "SLK-12", type: "Slack", date: "Thu, Nov 12 · 16:03", channel: "#sales", account: "Saudi Aramco", theme: "permissions", text: "Saudi Aramco asked whether a shared view can mask selected columns for a contractor role; the current setting is all-or-nothing." },
+      { id: "SLK-13", type: "Slack", date: "Thu, Nov 12 · 12:37", channel: "#eng-oncall", account: "Amazon", theme: null, text: "One workspace shows dates in the browser's local timezone instead of the workspace timezone. No other report from that tenant yet." },
+      { id: "SLK-14", type: "Slack", date: "Fri, Nov 13 · 09:08", channel: "#customer-escalations", account: "Berkshire Hathaway", theme: null, text: "Berkshire received two webhook notices for one export completion. Support has not found a second occurrence." },
+      { id: "SLK-15", type: "Slack", date: "Fri, Nov 13 · 11:42", channel: "#sales", account: "ICBC", theme: null, text: "ICBC asked whether annual invoices can use a custom payment reference field. No related request surfaced this week." },
+
+      // Jira issues: 10 total, including the one-off timezone issue.
+      { id: "SPACE-2101", type: "Jira", date: "Mon, Nov 9", account: "Amazon", theme: "pipeline", kind: "Bug", priority: "P1", status: "In Progress", text: "Connector 4.8.0: schema validation intermittently aborts scheduled pipeline runs." },
+      { id: "SPACE-2102", type: "Jira", date: "Tue, Nov 10", account: "Berkshire Hathaway", theme: "pipeline", kind: "Bug", priority: "P1", status: "Open", text: "Retry path does not recover the first failed sync after connector upgrade." },
+      { id: "SPACE-2103", type: "Jira", date: "Mon, Nov 9", account: "JPMorgan Chase", theme: "sso", kind: "Bug", priority: "P1", status: "In Progress", text: "SAML redirect returns admin to sign-in when the identity provider adds a relay state." },
+      { id: "SPACE-2104", type: "Jira", date: "Wed, Nov 11", account: "ICBC", theme: "sso", kind: "Bug", priority: "P2", status: "Open", text: "Workspace session expires immediately after successful SAML assertion." },
+      { id: "SPACE-2105", type: "Jira", date: "Tue, Nov 10", account: "JPMorgan Chase", theme: "dashboard", kind: "Bug", priority: "P1", status: "In Progress", text: "Dashboard query latency exceeds 60 seconds above 40M rows." },
+      { id: "SPACE-2106", type: "Jira", date: "Wed, Nov 11", account: "Berkshire Hathaway", theme: "dashboard", kind: "Bug", priority: "P2", status: "Open", text: "Concurrent dashboard queries remain queued after the first query finishes." },
+      { id: "SPACE-2107", type: "Jira", date: "Thu, Nov 12", account: "ICBC", theme: "dashboard", kind: "Feature request", priority: "P2", status: "Needs Triage", text: "Allow dashboard viewers to load a selected date range without fetching the full result set." },
+      { id: "SPACE-2108", type: "Jira", date: "Wed, Nov 11", account: "JPMorgan Chase", theme: "permissions", kind: "Feature request", priority: "P1", status: "Needs Triage", text: "Add column-level visibility rules for shared datasets and contractor roles." },
+      { id: "SPACE-2109", type: "Jira", date: "Thu, Nov 12", account: "Saudi Aramco", theme: "permissions", kind: "Feature request", priority: "P2", status: "Open", text: "Support masking selected columns in saved views while keeping other fields available." },
+      { id: "SPACE-2110", type: "Jira", date: "Fri, Nov 13", account: "Amazon", theme: null, kind: "Bug", priority: "P3", status: "Resolved", text: "CSV export displays UTC date for one workspace configured to use a regional timezone." },
+
+      // Support tickets: 15 total. Company names and account ARR are simulated labels.
+      { id: "GENESYS-4301", type: "Ticket", date: "Mon, Nov 9 · 08:50", account: "Amazon", theme: "pipeline", text: "After the connector update, today's scheduled load failed twice at validation. Our dashboard refresh is waiting on the data." },
+      { id: "GENESYS-4302", type: "Ticket", date: "Tue, Nov 10 · 10:31", account: "Berkshire Hathaway", theme: "pipeline", text: "The first sync after upgrading did not finish. The second attempt completed, but the release readiness check is now delayed." },
+      { id: "GENESYS-4303", type: "Ticket", date: "Wed, Nov 11 · 12:03", account: "Saudi Aramco", theme: "pipeline", text: "Backfill has stopped on the same field validation message for three source tables." },
+      { id: "GENESYS-4304", type: "Ticket", date: "Thu, Nov 12 · 16:29", account: "Amazon", theme: "pipeline", text: "Can you confirm the 4.8.0 pipeline issue is understood? Our analytics team is rerunning yesterday's failed jobs manually." },
+      { id: "GENESYS-4305", type: "Ticket", date: "Mon, Nov 9 · 14:12", account: "JPMorgan Chase", theme: "sso", text: "After the IdP sends us back to RocketShip, the browser shows the login page again instead of the workspace." },
+      { id: "GENESYS-4306", type: "Ticket", date: "Tue, Nov 10 · 11:47", account: "ICBC", theme: "sso", text: "SAML test says successful, but users are returned to sign-in before the home page opens." },
+      { id: "GENESYS-4307", type: "Ticket", date: "Wed, Nov 11 · 09:26", account: "Amazon", theme: "sso", text: "We cannot finish the service-user security review while the SSO callback will not hold a session." },
+      { id: "GENESYS-4308", type: "Ticket", date: "Fri, Nov 13 · 10:07", account: "JPMorgan Chase", theme: "sso", text: "A second admin sees a blank workspace after login; signing out and back in repeats the redirect." },
+      { id: "GENESYS-4309", type: "Ticket", date: "Tue, Nov 10 · 13:44", account: "JPMorgan Chase", theme: "dashboard", text: "The portfolio dashboard with roughly 50M rows takes more than a minute to become interactive." },
+      { id: "GENESYS-4310", type: "Ticket", date: "Wed, Nov 11 · 15:21", account: "Berkshire Hathaway", theme: "dashboard", text: "The loading spinner stays on screen while our analysts wait for two large dashboard queries to finish." },
+      { id: "GENESYS-4311", type: "Ticket", date: "Thu, Nov 12 · 10:18", account: "ICBC", theme: "dashboard", text: "Selecting a quarter for the month-end dashboard sometimes ends in a timeout." },
+      { id: "GENESYS-4312", type: "Ticket", date: "Fri, Nov 13 · 08:54", account: "Amazon", theme: "dashboard", text: "The dashboard is slow to open for our broadest dataset; reducing the date range makes it load." },
+      { id: "GENESYS-4313", type: "Ticket", date: "Wed, Nov 11 · 13:17", account: "JPMorgan Chase", theme: "permissions", text: "We need contractors to see the report but not the salary and account-number columns." },
+      { id: "GENESYS-4314", type: "Ticket", date: "Thu, Nov 12 · 14:06", account: "Berkshire Hathaway", theme: "permissions", text: "Can a shared dataset hide chosen fields without removing the full report from a contractor's view?" },
+      { id: "GENESYS-4315", type: "Ticket", date: "Fri, Nov 13 · 12:39", account: "Saudi Aramco", theme: "permissions", text: "Our external reviewers need the dashboard, but some columns must stay masked." }
+    ];
+
+    const themes = [
+      { id: "dashboard", emoji: "🐢", name: "Large dashboards load slowly", why: "Month-end and analyst work is delayed when large dashboards take over a minute to load (GENESYS-4309; SLK-08).", evidence: ["GENESYS-4309", "SLK-08"] },
+      { id: "pipeline", emoji: "🔄", name: "Pipelines fail after connector update", why: "Amazon's dashboard refresh and Berkshire's release-readiness check are waiting on failed syncs (GENESYS-4301; GENESYS-4302).", evidence: ["GENESYS-4301", "GENESYS-4302"] },
+      { id: "sso", emoji: "🔐", name: "SSO sign-in loops or drops sessions", why: "JPMorgan and Amazon report blocked admin or service-user access during sign-in (GENESYS-4305; GENESYS-4307).", evidence: ["GENESYS-4305", "GENESYS-4307"] },
+      { id: "permissions", emoji: "🛡️", name: "Teams need column-level permissions", why: "JPMorgan reports that contractor access cannot hide sensitive fields while keeping the report available (GENESYS-4313).", evidence: ["GENESYS-4313", "SLK-11"] }
+    ];
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+    })[char]);
+
+    const getSources = (themeId) => sources.filter((source) => source.theme === themeId);
+    const sourceCount = (list, type) => list.filter((source) => source.type === type).length;
+    const uniqueAccounts = (list) => [...new Set(list.map((source) => source.account))].sort((a, b) => a.localeCompare(b));
+
+    function sourceMeta(source) {
+      const extras = [];
+      if (source.channel) extras.push(source.channel);
+      if (source.kind) extras.push(source.kind);
+      if (source.priority) extras.push(source.priority);
+      if (source.status) extras.push(source.status);
+      return `<div class="source-meta"><span class="source-id">${escapeHtml(source.id)}</span><span class="source-type">${escapeHtml(source.type)}</span><span>${escapeHtml(source.date)}</span>${extras.map((extra) => `<span>· ${escapeHtml(extra)}</span>`).join("")}</div>`;
+    }
+
+    function renderSource(source) {
+      const account = accounts[source.account];
+      return `<li class="source-item" id="src-${escapeHtml(source.id)}">
+        ${sourceMeta(source)}
+        <p class="source-text">“${escapeHtml(source.text)}”</p>
+        <p class="source-context">Account: ${escapeHtml(source.account)} · Demo ARR: ${escapeHtml(account.arr)} (simulated)</p>
+      </li>`;
+    }
+
+    function renderTheme(theme) {
+      const items = getSources(theme.id);
+      const affected = uniqueAccounts(items);
+      const slacks = sourceCount(items, "Slack");
+      const jira = sourceCount(items, "Jira");
+      const tickets = sourceCount(items, "Ticket");
+      const evidence = theme.evidence.map((id) => sources.find((source) => source.id === id)).filter(Boolean);
+      const accountChips = affected.map((name) => `<span class="account-chip">${escapeHtml(name)} <small>· ${escapeHtml(accounts[name].arr)} demo ARR</small></span>`).join("");
+      return `<article class="theme-card" aria-labelledby="title-${escapeHtml(theme.id)}">
+        <div class="theme-top">
+          <span class="theme-emoji" aria-hidden="true">${theme.emoji}</span>
+          <div class="theme-heading"><h3 id="title-${escapeHtml(theme.id)}">${escapeHtml(theme.name)}</h3></div>
+          <span class="account-count">${affected.length} accounts</span>
+        </div>
+        <div class="counts" aria-label="Signal counts">
+          <span class="count-chip slack">${slacks} Slack</span>
+          <span class="count-chip jira">${jira} Jira</span>
+          <span class="count-chip ticket">${tickets} tickets</span>
+          <span class="count-chip total">${items.length} total</span>
+        </div>
+        <div class="evidence-label">Accounts mentioned · simulated demo ARR</div>
+        <div class="account-list">${accountChips}</div>
+        <div class="evidence-label">💬 Evidence from the week</div>
+        <div class="quote-row">${evidence.map((source) => `<blockquote>“${escapeHtml(source.text)}”<footer><a href="#src-${escapeHtml(source.id)}">${escapeHtml(source.type)} · ${escapeHtml(source.id)}</a></footer></blockquote>`).join("")}</div>
+        <p class="why"><strong>Why this matters:</strong> ${escapeHtml(theme.why)}</p>
+        <details>
+          <summary>View sources (${items.length})</summary>
+          <ul class="source-list">${items.map(renderSource).join("")}</ul>
+        </details>
+      </article>`;
+    }
+
+    const sortedThemes = [...themes].sort((a, b) => {
+      const aItems = getSources(a.id);
+      const bItems = getSources(b.id);
+      return uniqueAccounts(bItems).length - uniqueAccounts(aItems).length || bItems.length - aItems.length;
+    });
+
+    document.querySelector("#theme-grid").innerHTML = sortedThemes.map(renderTheme).join("");
+
+    const unthemed = sources.filter((source) => !source.theme);
+    document.querySelector("#loose-list").innerHTML = unthemed.map((source) =>
+      `<div class="loose-item"><span class="loose-id">${escapeHtml(source.id)}</span><span>${escapeHtml(source.text)}</span></div>`
+    ).join("");
+    document.querySelector("#signal-total").textContent = sources.length;
+    document.querySelector("#theme-total").textContent = themes.length;
+    document.querySelector("#loose-total").textContent = unthemed.length;
+  </script>
+</body>
+</html>
