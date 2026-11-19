@@ -79,7 +79,7 @@
       font-weight: 700;
     }
 
-    main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 26px; }
+    main { width: min(900px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 26px; }
     .eyebrow {
       color: var(--purple);
       font-size: 11px;
@@ -89,8 +89,8 @@
     }
     h1 { margin: 6px 0 5px; font-size: clamp(24px, 3vw, 31px); line-height: 1.15; letter-spacing: -.035em; }
     .subtitle { margin: 0; max-width: 760px; color: var(--muted); }
-    .hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
-    .summary-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .hero-row { display: flex; align-items: flex-start; flex-direction: column; gap: 12px; }
+    .summary-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-start; }
     .stat {
       display: flex;
       gap: 6px;
@@ -123,23 +123,40 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin: 25px 0 10px;
+      margin: 25px 0 0;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      border-radius: 9px 9px 0 0;
+      background: #202027;
     }
     h2 { margin: 0; font-size: 15px; letter-spacing: -.01em; }
     .sort-note { color: var(--muted); font-size: 11px; }
-    .theme-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .theme-grid { display: grid; grid-template-columns: 1fr; gap: 0; padding: 0 14px; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 9px 9px; background: rgba(30, 30, 36, .72); }
+    .digest-message { display: flex; gap: 11px; padding: 15px 14px; border: 1px solid var(--line); border-bottom: 1px solid #3a3a42; border-top: 0; background: #202027; }
+    .message-avatar { flex: 0 0 34px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 7px; background: #513b68; color: #f8efff; font-size: 19px; }
+    .message-avatar.summary-avatar { background: #403153; }
+    .message-body { flex: 1; min-width: 0; }
+    .message-header { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin: 0 0 5px; }
+    .sender { font-size: 13px; font-weight: 750; color: #f4f4f6; }
+    .app-badge { padding: 1px 5px; border-radius: 4px; background: #514366; color: #dfd0ff; font-size: 9px; font-weight: 750; letter-spacing: .04em; }
+    .timestamp { color: var(--muted); font-size: 10px; }
+    .message-copy { margin: 0; color: #e0e0e6; font-size: 12px; }
+    .channel-subline { display: flex; gap: 7px; align-items: center; margin-top: 7px; color: var(--muted); font-size: 10px; }
+    .channel-subline .dot { color: var(--subtle); }
     .theme-card {
+      display: flex;
+      gap: 11px;
       min-width: 0;
-      padding: 15px 16px 13px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(150deg, rgba(38, 38, 45, .96), rgba(30, 30, 36, .98));
-      box-shadow: 0 5px 16px rgba(0, 0, 0, .08);
+      padding: 15px 0 14px;
+      border-bottom: 1px solid #373740;
     }
-    .theme-top { display: flex; align-items: flex-start; gap: 10px; }
-    .theme-emoji { font-size: 20px; line-height: 1.1; }
+    .theme-card:last-child { border-bottom: 0; }
+    .theme-top { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 5px; }
+    .theme-emoji { font-size: 17px; line-height: 1.2; }
     .theme-heading { flex: 1; min-width: 0; }
-    .theme-heading h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.25; }
+    .theme-heading h3 { margin: 0; font-size: 14px; line-height: 1.3; }
+    .theme-index { margin-right: 6px; color: var(--muted); font-size: 10px; font-weight: 550; }
     .account-count {
       flex: 0 0 auto;
       padding: 4px 7px;
@@ -151,7 +168,7 @@
       font-weight: 650;
       white-space: nowrap;
     }
-    .counts { display: flex; gap: 6px; flex-wrap: wrap; margin: 7px 0 9px; }
+    .counts { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 9px; }
     .count-chip { padding: 3px 6px; border-radius: 5px; font-size: 10px; font-weight: 650; }
     .count-chip.slack { color: #ddbff3; background: rgba(126, 69, 142, .22); }
     .count-chip.jira { color: #a8cff4; background: rgba(47, 105, 156, .2); }
@@ -167,7 +184,7 @@
     }
     .account-chip small { color: #aaaab5; }
     .evidence-label { color: var(--subtle); font-size: 10px; font-weight: 700; letter-spacing: .075em; text-transform: uppercase; }
-    .quote-row { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin: 5px 0 9px; }
+    .quote-row { display: grid; grid-template-columns: 1fr; gap: 6px; margin: 5px 0 9px; }
     blockquote {
       margin: 0;
       padding: 8px 9px;
@@ -179,14 +196,7 @@
       line-height: 1.4;
     }
     blockquote footer { margin-top: 5px; color: var(--muted); font-size: 10px; }
-    .why {
-      margin: 0 0 9px;
-      padding: 8px 9px;
-      border-radius: 6px;
-      background: rgba(105, 83, 138, .13);
-      color: #e5def1;
-      font-size: 11px;
-    }
+    .why { margin: 0 0 9px; padding: 7px 9px; border-left: 2px solid #8266af; color: #e5def1; font-size: 11px; }
     .why strong { color: #d2bfff; }
     details { border-top: 1px solid #393941; padding-top: 8px; }
     details summary { width: fit-content; color: #c5b2f5; cursor: pointer; font-size: 11px; font-weight: 650; }
@@ -198,9 +208,18 @@
     .source-type { padding: 2px 5px; border-radius: 4px; background: #303038; color: #dedee4; }
     .source-text { margin: 5px 0 0; color: #e3e3e9; font-size: 11px; }
     .source-context { margin: 4px 0 0; color: #a9a9b3; font-size: 10px; }
+    .message-actions { display: flex; align-items: center; gap: 9px; margin-top: 8px; }
+    .thread-button { border: 0; padding: 2px 0; color: #bba4f8; background: transparent; cursor: pointer; font-size: 11px; font-weight: 650; }
+    .thread-button:hover { color: #e0d5ff; text-decoration: underline; }
+    .thread-state { color: var(--muted); font-size: 10px; }
+    .thread-panel { margin-top: 8px; padding: 10px; border-left: 2px solid #594a70; border-radius: 0 6px 6px 0; background: rgba(19, 19, 24, .62); }
+    .thread-panel[hidden] { display: none; }
+    .thread-panel p { margin: 0 0 7px; color: #d8d8e0; font-size: 11px; }
+    .reply-placeholder { padding: 7px 9px; border: 1px solid #41414a; border-radius: 5px; color: #858590; background: #202027; font-size: 10px; }
+    .demo-thread-note { margin-top: 5px; color: var(--subtle); font-size: 9px; }
     .unthemed {
       margin-top: 14px;
-      padding: 13px 15px;
+      padding: 12px 14px;
       border: 1px solid #3a3a42;
       border-radius: var(--radius);
       background: rgba(32, 32, 38, .8);
@@ -208,7 +227,7 @@
     .unthemed-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 9px; }
     .unthemed-head h2 { font-size: 13px; }
     .unthemed-head span { color: var(--muted); font-size: 10px; }
-    .loose-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 12px; }
+    .loose-list { display: grid; grid-template-columns: 1fr; gap: 6px; }
     .loose-item { display: flex; gap: 7px; align-items: baseline; color: #d8d8de; font-size: 11px; }
     .loose-id { flex: 0 0 auto; color: var(--purple); font-size: 10px; font-weight: 700; }
     .footer-note { margin: 12px 2px 0; color: var(--subtle); font-size: 10px; }
@@ -217,21 +236,19 @@
 
     @media (max-width: 760px) {
       .topbar { padding: 0 14px; }
-      main { width: min(100% - 24px, 580px); padding-top: 22px; }
-      .hero-row { align-items: flex-start; flex-direction: column; gap: 12px; }
+      main { width: min(100% - 24px, 680px); padding-top: 22px; }
       .summary-stats { justify-content: flex-start; }
-      .theme-grid { grid-template-columns: 1fr; }
-      .quote-row { grid-template-columns: 1fr; }
-      .loose-list { grid-template-columns: 1fr; }
       .workspace-tag { display: none; }
     }
     @media (max-width: 420px) {
       main { width: calc(100% - 20px); }
       .topbar { gap: 9px; }
       .crumb { display: none; }
-      .theme-card { padding: 13px 12px; }
+      .theme-card { gap: 8px; padding: 13px 0; }
+      .message-avatar { flex-basis: 30px; width: 30px; height: 30px; }
       .account-count { font-size: 9px; }
       .stat { padding: 6px 8px; }
+      .section-head { align-items: flex-start; flex-direction: column; gap: 3px; }
     }
   </style>
 </head>
@@ -252,7 +269,7 @@
         <div>
           <div class="eyebrow">Weekly customer signals</div>
           <h1 id="page-title">Juno Seven-day feedback digest</h1>
-          <p class="subtitle">Week of November 9, 2026 · A source-linked synthesis of what customers and teams reported.</p>
+          <p class="subtitle">Week of November 9–13, 2026 · A source-linked synthesis posted Monday morning.</p>
         </div>
         <div class="summary-stats" aria-label="Digest totals">
           <div class="stat"><strong id="signal-total">40</strong><span>signals processed</span></div>
@@ -265,9 +282,17 @@
 
     <section aria-labelledby="themes-title">
       <div class="section-head">
-        <h2 id="themes-title">💬 This week in feedback</h2>
-        <span class="sort-note">Sorted by affected accounts, then signal count</span>
+        <h2 id="themes-title"># customer-feedback-nov19</h2>
+        <span class="sort-note">Juno's weekly digest · one post per theme · sorted by affected accounts</span>
       </div>
+      <article class="digest-message" aria-label="Juno weekly digest summary">
+        <div class="message-avatar summary-avatar" aria-hidden="true">✦</div>
+        <div class="message-body">
+          <div class="message-header"><span class="sender">Juno PM</span><span class="app-badge">APP</span><span class="timestamp">Mon, Nov 16 at 9:00 AM CET</span></div>
+          <p class="message-copy">Good morning, team — I synthesized 40 signals from Nov 9–13 across Slack, Jira, and support tickets into four recurring themes. Each theme is posted below as a separate message so the discussion can stay in its own thread. Four one-off signals are listed at the bottom for review.</p>
+          <div class="channel-subline"><span>📊</span><span>40 signals</span><span class="dot">·</span><span>4 themes</span><span class="dot">·</span><span>4 unthemed</span></div>
+        </div>
+      </article>
       <div class="theme-grid" id="theme-grid" aria-live="polite"></div>
     </section>
 
@@ -376,7 +401,7 @@
       </li>`;
     }
 
-    function renderTheme(theme) {
+    function renderTheme(theme, index) {
       const items = getSources(theme.id);
       const affected = uniqueAccounts(items);
       const slacks = sourceCount(items, "Slack");
@@ -385,26 +410,39 @@
       const evidence = theme.evidence.map((id) => sources.find((source) => source.id === id)).filter(Boolean);
       const accountChips = affected.map((name) => `<span class="account-chip">${escapeHtml(name)} <small>· ${escapeHtml(accounts[name].arr)} demo ARR</small></span>`).join("");
       return `<article class="theme-card" aria-labelledby="title-${escapeHtml(theme.id)}">
-        <div class="theme-top">
-          <span class="theme-emoji" aria-hidden="true">${theme.emoji}</span>
-          <div class="theme-heading"><h3 id="title-${escapeHtml(theme.id)}">${escapeHtml(theme.name)}</h3></div>
-          <span class="account-count">${affected.length} accounts</span>
+        <div class="message-avatar" aria-hidden="true">✦</div>
+        <div class="message-body">
+          <div class="message-header"><span class="sender">Juno PM</span><span class="app-badge">APP</span><span class="timestamp">Mon, Nov 16 at 9:00 AM CET</span></div>
+          <div class="theme-top">
+            <span class="theme-emoji" aria-hidden="true">${theme.emoji}</span>
+            <div class="theme-heading"><h3 id="title-${escapeHtml(theme.id)}"><span class="theme-index">Theme ${index + 1}</span>${escapeHtml(theme.name)}</h3></div>
+            <span class="account-count">${affected.length} accounts</span>
+          </div>
+          <div class="counts" aria-label="Signal counts">
+            <span class="count-chip slack">${slacks} Slack</span>
+            <span class="count-chip jira">${jira} Jira</span>
+            <span class="count-chip ticket">${tickets} tickets</span>
+            <span class="count-chip total">${items.length} total</span>
+          </div>
+          <div class="evidence-label">Accounts mentioned · simulated demo ARR</div>
+          <div class="account-list">${accountChips}</div>
+          <div class="evidence-label">💬 Evidence from the week</div>
+          <div class="quote-row">${evidence.map((source) => `<blockquote>“${escapeHtml(source.text)}”<footer><a href="#src-${escapeHtml(source.id)}">${escapeHtml(source.type)} · ${escapeHtml(source.id)}</a></footer></blockquote>`).join("")}</div>
+          <p class="why"><strong>Why this matters:</strong> ${escapeHtml(theme.why)}</p>
+          <details>
+            <summary>View sources (${items.length})</summary>
+            <ul class="source-list">${items.map(renderSource).join("")}</ul>
+          </details>
+          <div class="message-actions">
+            <button class="thread-button" type="button" aria-expanded="false" aria-controls="thread-${escapeHtml(theme.id)}">↪ Reply in thread</button>
+            <span class="thread-state">Separate discussion for this theme</span>
+          </div>
+          <div class="thread-panel" id="thread-${escapeHtml(theme.id)}" hidden>
+            <p>Team discussion would stay attached to this theme message.</p>
+            <div class="reply-placeholder">Reply to this thread…</div>
+            <div class="demo-thread-note">Prototype only · replies are not sent or saved.</div>
+          </div>
         </div>
-        <div class="counts" aria-label="Signal counts">
-          <span class="count-chip slack">${slacks} Slack</span>
-          <span class="count-chip jira">${jira} Jira</span>
-          <span class="count-chip ticket">${tickets} tickets</span>
-          <span class="count-chip total">${items.length} total</span>
-        </div>
-        <div class="evidence-label">Accounts mentioned · simulated demo ARR</div>
-        <div class="account-list">${accountChips}</div>
-        <div class="evidence-label">💬 Evidence from the week</div>
-        <div class="quote-row">${evidence.map((source) => `<blockquote>“${escapeHtml(source.text)}”<footer><a href="#src-${escapeHtml(source.id)}">${escapeHtml(source.type)} · ${escapeHtml(source.id)}</a></footer></blockquote>`).join("")}</div>
-        <p class="why"><strong>Why this matters:</strong> ${escapeHtml(theme.why)}</p>
-        <details>
-          <summary>View sources (${items.length})</summary>
-          <ul class="source-list">${items.map(renderSource).join("")}</ul>
-        </details>
       </article>`;
     }
 
@@ -415,6 +453,26 @@
     });
 
     document.querySelector("#theme-grid").innerHTML = sortedThemes.map(renderTheme).join("");
+
+    document.querySelectorAll(".thread-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const panel = document.getElementById(button.getAttribute("aria-controls"));
+        const isOpen = button.getAttribute("aria-expanded") === "true";
+        button.setAttribute("aria-expanded", String(!isOpen));
+        panel.hidden = isOpen;
+        button.textContent = isOpen ? "↪ Reply in thread" : "↪ Close thread preview";
+      });
+    });
+
+    document.querySelectorAll('blockquote a[href^="#src-"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        const details = target && target.closest("details");
+        if (details) details.open = true;
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    });
 
     const unthemed = sources.filter((source) => !source.theme);
     document.querySelector("#loose-list").innerHTML = unthemed.map((source) =>
